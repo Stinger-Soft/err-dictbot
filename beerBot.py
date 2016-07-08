@@ -18,7 +18,7 @@ class BeerBot(BotPlugin):
             if type(configuration) != dict:
                 raise Exception('Wrong configuration type')
 
-            if not configuration.has_key('BREWERY_DB_TOKEN'):
+            if not 'BREWERY_DB_TOKEN' in configuration:
                 raise Exception('Wrong configuration type, it should contain BREWERY_DB_TOKEN')
 
             if len(configuration) > 1:
