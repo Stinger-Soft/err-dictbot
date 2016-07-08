@@ -42,8 +42,8 @@ class BeerBot(BotPlugin):
         if token is None:
             return 'Invalid configuration'
 
-        content = urlopen(self.BREWERY_DB_URL_SEARCH % token + '&q=' + quote(args.strip()) + '&type=beer')
-        results = json.load(content)
+        response = urlopen(self.BREWERY_DB_URL_SEARCH % token + '&q=' + quote(args.strip()) + '&type=beer').read().decode('utf8')
+        results = json.loads(response)
         for beer_data in results.get('data', []):
             name = beer_data.get('name', None)
             description = beer_data.get('description', '')
@@ -56,11 +56,12 @@ class BeerBot(BotPlugin):
             style_name = style.get('name', '') if style else None
             style_description = style.get('description', None) if style else None
             if choosen_label:
-                self.send(mess.getFrom(), choosen_label, message_type=mess.getType())
+                self.send(mess.frm, choosen_label, message_type=mess.type)
             if name:
                 shortdesc = name + '\n' + description
-                self.send(mess.getFrom(), shortdesc, message_type=mess.getType())
+                self.send(mess.frm, shortdesc, message_type=mess.type)
                 #if style_name:
                 #    styledesc = style_name + '\n' + '-' * len(style_name) + '\n' + style_description
                 #    self.send(mess.getFrom(), styledesc, message_type=mess.getType())
         return '/me is looking for your beer'
+
